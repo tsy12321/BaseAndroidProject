@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.tsy.baseandroidproject.Base.BaseApi;
-import com.tsy.baseandroidproject.Base.BaseDataRet;
+import com.tsy.baseandroidproject.Base.BaseRetData;
 import com.tsy.baseandroidproject.Login.model.LoginApi;
 
 /**
@@ -20,7 +20,7 @@ public class RootAct extends AppCompatActivity {
 
         new LoginApi().login("tsy", "as", new BaseApi.ApiCallback() {
             @Override
-            public void onSuccess(BaseDataRet ret) {
+            public void onSuccess(BaseRetData ret) {
                 Log.i("tsy", "onSuccess:");
             }
 

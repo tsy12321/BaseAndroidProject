@@ -22,7 +22,7 @@ public class LoginApi extends BaseApi {
 
     public void login(String username, String password, ApiCallback callback) {
         Call<LoginRetData> call = ((ApiStore)mApiStore).login();
-        call.enqueue(callBack(new LoginRetData(), callback));
+        call.enqueue(new RetrofitCallback<LoginRetData>(callback));
     }
 
     public interface ApiStore {
