@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.tsy.baseandroidproject.GlobalApp;
+
 /**
  * 网络相关工具类
  * Created by tsy on 16/7/21.
@@ -12,10 +14,10 @@ public class NetworkUtils {
 
     /**
      * 检查网络是否连接
-     * @param context
      * @return true 已连接 false 未连接
      */
-    public static Boolean checkNetworkConnect(Context context) {
+    public static Boolean checkNetworkConnect() {
+        Context context = GlobalApp.getInstance().getContext();
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
