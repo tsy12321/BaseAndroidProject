@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.tsy.baseandroidproject.GlobalApp;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +21,7 @@ public class BitmapUtils {
      * @param resId
      * @return
      */
-    public static Bitmap readBitMap(int resId) {
-        Context context = GlobalApp.getInstance().getContext();
-
+    public static Bitmap readBitMap(Context context, int resId) {
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inPreferredConfig = Bitmap.Config.RGB_565;
         opt.inPurgeable = true;

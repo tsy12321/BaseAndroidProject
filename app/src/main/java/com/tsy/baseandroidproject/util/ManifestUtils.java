@@ -5,8 +5,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import com.tsy.baseandroidproject.GlobalApp;
-
 /**
  * manifest工具类
  * Created by tsy on 16/7/25.
@@ -22,8 +20,7 @@ public class ManifestUtils {
      *      成功-value
      *      失败-""
      */
-    public static String getMetaData(String key) {
-        Context context = GlobalApp.getInstance().getContext();
+    public static String getMetaData(Context context, String key) {
         ApplicationInfo app_info = null;
         try {
             app_info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
@@ -47,8 +44,7 @@ public class ManifestUtils {
      * 获取版本名
      * @return
      */
-    public static String getVersionName() {
-        Context context = GlobalApp.getInstance().getContext();
+    public static String getVersionName(Context context) {
         String version = "0.0";
         try {
             PackageManager packageManager = context.getPackageManager();
