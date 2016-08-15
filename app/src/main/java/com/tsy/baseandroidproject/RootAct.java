@@ -31,7 +31,7 @@ public class RootAct extends BaseActivity {
 //            }
 //        });
 
-        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new GsonResponseHandler<BB>(BB.class) {
+        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new GsonResponseHandler<BB>() {
 
             @Override
             public void onFailure(int statusCode, String error_msg) {
@@ -43,6 +43,7 @@ public class RootAct extends BaseActivity {
                 LogUtils.v(TAG, statusCode + " " + response.ret);
             }
         });
+
     }
 
     public class BB {

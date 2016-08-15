@@ -173,7 +173,7 @@ public class MyOkHttp {
                             try {
                                 Gson gson = new Gson();
                                 ((GsonResponseHandler)mResponseHandler).onSuccess(response.code(),
-                                        gson.fromJson(response_body, ((GsonResponseHandler)mResponseHandler).getCls()));
+                                        gson.fromJson(response_body, ((GsonResponseHandler)mResponseHandler).getType()));
                             } catch (Exception e) {
                                 LogUtils.e("onResponse fail parse gson, body=" + response_body, e);
                                 mResponseHandler.onFailure(response.code(), "fail parse gson, body=" + response_body);
