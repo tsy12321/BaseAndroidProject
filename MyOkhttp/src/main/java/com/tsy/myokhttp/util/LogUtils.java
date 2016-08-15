@@ -1,9 +1,8 @@
-package com.tsy.baseandroidproject.util;
+package com.tsy.myokhttp.util;
 
 import android.util.Log;
 
 /**
- * LOG工具类
  * Created by tsy on 16/8/15.
  */
 public class LogUtils {
