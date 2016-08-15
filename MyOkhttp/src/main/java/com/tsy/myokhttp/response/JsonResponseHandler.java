@@ -9,6 +9,4 @@ import org.json.JSONObject;
 public abstract class JsonResponseHandler implements IResponseHandler {
 
     public abstract void onSuccess(int statusCode, JSONObject response);
-
-    public abstract void onFailure(int statusCode, String error_msg);
 }

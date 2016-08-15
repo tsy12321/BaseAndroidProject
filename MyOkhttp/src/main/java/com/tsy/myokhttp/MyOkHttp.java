@@ -3,6 +3,8 @@ package com.tsy.myokhttp;
 import android.content.Context;
 import android.os.Handler;
 
+import com.google.gson.Gson;
+import com.tsy.myokhttp.response.GsonResponseHandler;
 import com.tsy.myokhttp.response.IResponseHandler;
 import com.tsy.myokhttp.response.JsonResponseHandler;
 import com.tsy.myokhttp.util.LogUtils;
@@ -133,14 +135,12 @@ public class MyOkHttp {
         public void onFailure(Call call, final IOException e) {
             LogUtils.e("onFailure", e);
 
-            if(mResponseHandler instanceof JsonResponseHandler) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((JsonResponseHandler)mResponseHandler).onFailure(0, e.toString());
-                    }
-                });
-            }
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mResponseHandler.onFailure(0, e.toString());
+                }
+            });
         }
 
         @Override
@@ -162,22 +162,35 @@ public class MyOkHttp {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                ((JsonResponseHandler)mResponseHandler).onFailure(response.code(), "fail parse jsonobject, body=" + response_body);
+                                mResponseHandler.onFailure(response.code(), "fail parse jsonobject, body=" + response_body);
                             }
                         });
                     }
+                } else if(mResponseHandler instanceof GsonResponseHandler) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Gson gson = new Gson();
+                                ((GsonResponseHandler)mResponseHandler).onSuccess(response.code(),
+                                        gson.fromJson(response_body, ((GsonResponseHandler)mResponseHandler).getCls()));
+                            } catch (Exception e) {
+                                LogUtils.e("onResponse fail parse gson, body=" + response_body, e);
+                                mResponseHandler.onFailure(response.code(), "fail parse gson, body=" + response_body);
+                            }
+
+                        }
+                    });
                 }
             } else {
                 LogUtils.e("onResponse fail status=" + response.code());
 
-                if(mResponseHandler instanceof JsonResponseHandler) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((JsonResponseHandler)mResponseHandler).onFailure(0, "fail status=" + response.code());
-                        }
-                    });
-                }
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mResponseHandler.onFailure(0, "fail status=" + response.code());
+                    }
+                });
             }
         }
     }
