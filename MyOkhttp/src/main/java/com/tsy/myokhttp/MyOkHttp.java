@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.google.gson.Gson;
-import com.tsy.myokhttp.body.ProgressHelper;
+import com.tsy.myokhttp.body.ProgressRequestBody;
+import com.tsy.myokhttp.body.ResponseProgressBody;
+import com.tsy.myokhttp.response.DownloadResponseHandler;
 import com.tsy.myokhttp.response.GsonResponseHandler;
 import com.tsy.myokhttp.response.IResponseHandler;
 import com.tsy.myokhttp.response.JsonResponseHandler;
@@ -14,7 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.Map;
@@ -23,6 +27,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -156,11 +161,42 @@ public class MyOkHttp {
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(ProgressHelper.addProgressRequestListener(multipartBuilder.build(), responseHandler))
+                .post(new ProgressRequestBody(multipartBuilder.build(),responseHandler))
                 .tag(context)
                 .build();
 
         client.newCall(request).enqueue(new MyCallback(new Handler(), responseHandler));
+    }
+
+    /**
+     * 下载文件
+     * @param context 发起请求的context
+     * @param url 下载地址
+     * @param filedir 下载目的目录
+     * @param filename 下载目的文件名
+     * @param downloadResponseHandler 下载回调
+     */
+    public void download(Context context, String url, String filedir, String filename, final DownloadResponseHandler downloadResponseHandler) {
+
+        //发起request
+        Request request = new Request.Builder()
+                .url(url)
+                .tag(context)
+                .build();
+
+        client.newBuilder()
+                .addNetworkInterceptor(new Interceptor() {      //设置拦截器
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Response originalResponse = chain.proceed(chain.request());
+                        return originalResponse.newBuilder()
+                                .body(new ResponseProgressBody(originalResponse.body(), downloadResponseHandler))
+                                .build();
+                    }
+                })
+                .build()
+                .newCall(request)
+                .enqueue(new MyDownloadCallback(new Handler(), downloadResponseHandler, filedir, filename));
     }
 
     /**
@@ -176,6 +212,71 @@ public class MyOkHttp {
             for(Call call : client.dispatcher().runningCalls()) {
                 if(call.request().tag().equals(context))
                     call.cancel();
+            }
+        }
+    }
+
+    //下载回调
+    private class MyDownloadCallback implements Callback {
+
+        private Handler mHandler;
+        private DownloadResponseHandler mDownloadResponseHandler;
+        private String mFileDir;
+        private String mFilename;
+
+        public MyDownloadCallback(Handler handler, DownloadResponseHandler downloadResponseHandler,
+                                  String filedir, String filename) {
+            mHandler = handler;
+            mDownloadResponseHandler = downloadResponseHandler;
+            mFileDir = filedir;
+            mFilename = filename;
+        }
+
+        @Override
+        public void onFailure(Call call, final IOException e) {
+            LogUtils.e("onFailure", e);
+
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDownloadResponseHandler.onFailure(e.toString());
+                }
+            });
+        }
+
+        @Override
+        public void onResponse(Call call, final Response response) throws IOException {
+            if(response.isSuccessful()) {
+                File file = null;
+                try {
+                    file = saveFile(response, mFileDir, mFilename);
+                } catch (final IOException e) {
+                    LogUtils.e("onResponse saveFile fail", e);
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDownloadResponseHandler.onFailure("onResponse saveFile fail." + e.toString());
+                        }
+                    });
+                }
+
+                final File newFile = file;
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDownloadResponseHandler.onFinish(newFile);
+                    }
+                });
+            } else {
+                LogUtils.e("onResponse fail status=" + response.code());
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDownloadResponseHandler.onFailure("fail status=" + response.code());
+                    }
+                });
             }
         }
     }
@@ -251,6 +352,37 @@ public class MyOkHttp {
                         mResponseHandler.onFailure(0, "fail status=" + response.code());
                     }
                 });
+            }
+        }
+    }
+
+    //保存文件
+    private File saveFile(Response response, String filedir, String filename) throws IOException {
+        InputStream is = null;
+        byte[] buf = new byte[2048];
+        int len;
+        FileOutputStream fos = null;
+        try {
+            is = response.body().byteStream();
+            File dir = new File(filedir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File file = new File(dir, filename);
+            fos = new FileOutputStream(file);
+            while ((len = is.read(buf)) != -1) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+            return file;
+        } finally {
+            try {
+                if (is != null) is.close();
+            } catch (IOException e) {
+            }
+            try {
+                if (fos != null) fos.close();
+            } catch (IOException e) {
             }
         }
     }

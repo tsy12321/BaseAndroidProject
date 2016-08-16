@@ -22,7 +22,7 @@ public abstract class GsonResponseHandler<T> implements IResponseHandler {
         mType = $Gson$Types.canonicalize(parameter.getActualTypeArguments()[0]);  //将泛型转为type
     }
 
-    public Type getType() {
+    public final Type getType() {
         return mType;
     }
 

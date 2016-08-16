@@ -6,7 +6,11 @@ import android.os.Environment;
 import com.tsy.baseandroidproject.Base.BaseActivity;
 import com.tsy.baseandroidproject.util.LogUtils;
 import com.tsy.myokhttp.MyOkHttp;
+import com.tsy.myokhttp.response.DownloadResponseHandler;
 import com.tsy.myokhttp.response.GsonResponseHandler;
+import com.tsy.myokhttp.response.JsonResponseHandler;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -24,31 +28,45 @@ public class RootAct extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
 
-//        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new JsonResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, JSONObject response) {
-//                LogUtils.v(TAG, statusCode + " " + response);
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, String error_msg) {
-//                LogUtils.v(TAG, statusCode + " " + error_msg);
-//            }
-//        });
+//        doPost();
+//        doGet();
+//        doUpload();
+        doDownload();
+    }
 
-//        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new GsonResponseHandler<BB>() {
-//
-//            @Override
-//            public void onFailure(int statusCode, String error_msg) {
-//                LogUtils.v(TAG, statusCode + " " + error_msg);
-//            }
-//
-//            @Override
-//            public void onSuccess(int statusCode, BB response) {
-//                LogUtils.v(TAG, statusCode + " " + response.ret);
-//            }
-//        });
+    //post请求
+    private void doPost() {
+        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new JsonResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, JSONObject response) {
+                LogUtils.v(TAG, statusCode + " " + response);
+            }
 
+            @Override
+            public void onFailure(int statusCode, String error_msg) {
+                LogUtils.v(TAG, statusCode + " " + error_msg);
+            }
+        });
+    }
+
+    //get请求
+    private void doGet() {
+        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new GsonResponseHandler<BB>() {
+
+            @Override
+            public void onFailure(int statusCode, String error_msg) {
+                LogUtils.v(TAG, statusCode + " " + error_msg);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, BB response) {
+                LogUtils.v(TAG, statusCode + " " + response.ret);
+            }
+        });
+    }
+
+    //上传文件
+    private void doUpload() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("name", "tsy");
 
@@ -72,7 +90,28 @@ public class RootAct extends BaseActivity {
                 LogUtils.v(TAG, currentBytes + "/" + totalBytes);
             }
         });
+    }
 
+    //下载文件
+    private void doDownload() {
+        MyOkHttp.get().download(this, "http://192.168.3.1/output_tmp.jpg",
+                Environment.getExternalStorageDirectory() + "/com.ci123.service.splashandroid/", "1.jpg",
+                new DownloadResponseHandler() {
+            @Override
+            public void onFinish(File download_file) {
+                LogUtils.v(TAG, "onFinish:" + download_file.getPath());
+            }
+
+            @Override
+            public void onProgress(long currentBytes, long totalBytes) {
+                LogUtils.v(TAG, currentBytes + "/" + totalBytes);
+            }
+
+            @Override
+            public void onFailure(String error_msg) {
+                LogUtils.v(TAG, error_msg);
+            }
+        });
     }
 
     public class BB {
