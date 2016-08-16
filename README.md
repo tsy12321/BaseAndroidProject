@@ -25,7 +25,7 @@ Android项目基础架构。包含架构分层、基本工具层等, 持续更�
 
 详细使用见:
 
-[MyOkhttp README](../MyOkhttp/)
+[MyOkhttp README](https://github.com/tsy12321/BaseAndroidProject/tree/master/MyOkhttp)
 
 ### 依赖注入
 
