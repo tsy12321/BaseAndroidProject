@@ -1,6 +1,6 @@
-package com.tsy.myokhttp.body;
+package com.tsy.sdk.myokhttp.body;
 
-import com.tsy.myokhttp.response.DownloadResponseHandler;
+import com.tsy.sdk.myokhttp.response.DownloadResponseHandler;
 
 import java.io.IOException;
 

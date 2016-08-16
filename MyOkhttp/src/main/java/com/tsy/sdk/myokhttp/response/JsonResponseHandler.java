@@ -1,4 +1,4 @@
-package com.tsy.myokhttp.response;
+package com.tsy.sdk.myokhttp.response;
 
 import org.json.JSONObject;
 

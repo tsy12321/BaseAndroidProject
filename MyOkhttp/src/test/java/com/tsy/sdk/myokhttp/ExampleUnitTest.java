@@ -1,4 +1,4 @@
-package com.tsy.myokhttp;
+package com.tsy.sdk.myokhttp;
 
 import org.junit.Test;
 

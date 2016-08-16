@@ -5,10 +5,10 @@ import android.os.Environment;
 
 import com.tsy.baseandroidproject.Base.BaseActivity;
 import com.tsy.baseandroidproject.util.LogUtils;
-import com.tsy.myokhttp.MyOkHttp;
-import com.tsy.myokhttp.response.DownloadResponseHandler;
-import com.tsy.myokhttp.response.GsonResponseHandler;
-import com.tsy.myokhttp.response.JsonResponseHandler;
+import com.tsy.sdk.myokhttp.MyOkHttp;
+import com.tsy.sdk.myokhttp.response.DownloadResponseHandler;
+import com.tsy.sdk.myokhttp.response.GsonResponseHandler;
+import com.tsy.sdk.myokhttp.response.JsonResponseHandler;
 
 import org.json.JSONObject;
 

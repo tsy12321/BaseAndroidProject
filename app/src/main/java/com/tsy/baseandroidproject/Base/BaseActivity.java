@@ -2,7 +2,7 @@ package com.tsy.baseandroidproject.Base;
 
 import android.app.Activity;
 
-import com.tsy.myokhttp.MyOkHttp;
+import com.tsy.sdk.myokhttp.MyOkHttp;
 
 /**
  * BaseActivity

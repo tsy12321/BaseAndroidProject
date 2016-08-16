@@ -1,16 +1,16 @@
-package com.tsy.myokhttp;
+package com.tsy.sdk.myokhttp;
 
 import android.content.Context;
 import android.os.Handler;
 
 import com.google.gson.Gson;
-import com.tsy.myokhttp.body.ProgressRequestBody;
-import com.tsy.myokhttp.body.ResponseProgressBody;
-import com.tsy.myokhttp.response.DownloadResponseHandler;
-import com.tsy.myokhttp.response.GsonResponseHandler;
-import com.tsy.myokhttp.response.IResponseHandler;
-import com.tsy.myokhttp.response.JsonResponseHandler;
-import com.tsy.myokhttp.util.LogUtils;
+import com.tsy.sdk.myokhttp.body.ProgressRequestBody;
+import com.tsy.sdk.myokhttp.body.ResponseProgressBody;
+import com.tsy.sdk.myokhttp.response.DownloadResponseHandler;
+import com.tsy.sdk.myokhttp.response.GsonResponseHandler;
+import com.tsy.sdk.myokhttp.response.IResponseHandler;
+import com.tsy.sdk.myokhttp.response.JsonResponseHandler;
+import com.tsy.sdk.myokhttp.util.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
