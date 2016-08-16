@@ -36,7 +36,10 @@ public class RootAct extends BaseActivity {
 
     //post请求
     private void doPost() {
-        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new JsonResponseHandler() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("name", "tsy");
+
+        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", params, new JsonResponseHandler() {
             @Override
             public void onSuccess(int statusCode, JSONObject response) {
                 LogUtils.v(TAG, statusCode + " " + response);
@@ -51,7 +54,10 @@ public class RootAct extends BaseActivity {
 
     //get请求
     private void doGet() {
-        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", null, new GsonResponseHandler<BB>() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("name", "tsy");
+
+        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", params, new GsonResponseHandler<BB>() {
 
             @Override
             public void onFailure(int statusCode, String error_msg) {
