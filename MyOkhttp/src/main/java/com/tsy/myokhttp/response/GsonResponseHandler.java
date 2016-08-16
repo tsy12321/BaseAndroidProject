@@ -27,4 +27,9 @@ public abstract class GsonResponseHandler<T> implements IResponseHandler {
     }
 
     public abstract void onSuccess(int statusCode, T response);
+
+    @Override
+    public void onProgress(long currentBytes, long totalBytes) {
+
+    }
 }

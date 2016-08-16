@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.google.gson.Gson;
+import com.tsy.myokhttp.body.ProgressHelper;
 import com.tsy.myokhttp.response.GsonResponseHandler;
 import com.tsy.myokhttp.response.IResponseHandler;
 import com.tsy.myokhttp.response.JsonResponseHandler;
@@ -12,14 +13,21 @@ import com.tsy.myokhttp.util.LogUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.FileNameMap;
+import java.net.URLConnection;
 import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -97,6 +105,58 @@ public class MyOkHttp {
         //发起request
         Request request = new Request.Builder()
                 .url(url)
+                .tag(context)
+                .build();
+
+        client.newCall(request).enqueue(new MyCallback(new Handler(), responseHandler));
+    }
+
+    /**
+     * 上传文件
+     * @param context 发起请求的context
+     * @param url url
+     * @param files 上传的文件files
+     * @param responseHandler 回调
+     */
+    public void upload(Context context, String url, Map<String, File> files, final IResponseHandler responseHandler) {
+        upload(context, url, null, files, responseHandler);
+    }
+
+    /**
+     * 上传文件
+     * @param context 发起请求的context
+     * @param url url
+     * @param params 参数
+     * @param files 上传的文件files
+     * @param responseHandler 回调
+     */
+    public void upload(Context context, String url, Map<String, String> params, Map<String, File> files, final IResponseHandler responseHandler) {
+        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+        //添加参数
+        if (params != null && !params.isEmpty()) {
+            for (String key : params.keySet()) {
+                multipartBuilder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + key + "\""),
+                        RequestBody.create(null, params.get(key)));
+            }
+        }
+
+        //添加上传文件
+        if (files != null && !files.isEmpty()) {
+            RequestBody fileBody;
+            for (String key : files.keySet()) {
+                File file = files.get(key);
+                String fileName = file.getName();
+                fileBody = RequestBody.create(MediaType.parse(guessMimeType(fileName)), file);
+                multipartBuilder.addPart(Headers.of("Content-Disposition",
+                        "form-data; name=\"" + key + "\"; filename=\"" + fileName + "\""),
+                        fileBody);
+            }
+        }
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(ProgressHelper.addProgressRequestListener(multipartBuilder.build(), responseHandler))
                 .tag(context)
                 .build();
 
@@ -193,5 +253,15 @@ public class MyOkHttp {
                 });
             }
         }
+    }
+
+    //获取mime type
+    private String guessMimeType(String path) {
+        FileNameMap fileNameMap = URLConnection.getFileNameMap();
+        String contentTypeFor = fileNameMap.getContentTypeFor(path);
+        if (contentTypeFor == null) {
+            contentTypeFor = "application/octet-stream";
+        }
+        return contentTypeFor;
     }
 }
