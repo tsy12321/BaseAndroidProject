@@ -2,7 +2,7 @@ package com.tsy.baseandroidproject.Base;
 
 import android.content.Context;
 
-import com.tsy.baseandroidproject.Lib.ACache;
+import com.tsy.sdk.acache.ACache;
 
 
 /**

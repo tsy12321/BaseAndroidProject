@@ -1,4 +1,4 @@
-package com.tsy.baseandroidproject.util;
+package com.tsy.sdk.myutil;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,9 +17,10 @@ public class BitmapUtils {
     private static final String TAG = "BitmapUtils";
 
     /**
-     * 读取资源到Bitmap
-     * @param resId
-     * @return
+     * RGB_565方式读取资源到Bitmap
+     * @param context 全局context
+     * @param resId 资源id
+     * @return bitmap
      */
     public static Bitmap readBitMap(Context context, int resId) {
         BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -31,9 +32,9 @@ public class BitmapUtils {
     }
 
     /**
-     * 读取本地文件到Bitmap
-     * @param path
-     * @return
+     * RGB_565方式读取资源到Bitmap
+     * @param path 文件图片路径
+     * @return bitmap
      */
     public static Bitmap readBitMap(String path) {
         BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -44,9 +45,9 @@ public class BitmapUtils {
     }
 
     /**
-     * Bitmap 转 bytes
-     * @param bitmap
-     * @return
+     * Bitmap 转 byte[]
+     * @param bitmap 待转bitmap
+     * @return 成功-byte[] 失败-null
      */
     public static byte[] bitmap2Bytes(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = null;
@@ -78,11 +79,10 @@ public class BitmapUtils {
     }
 
     /**
-     * 压缩图片
-     * 在保证质量的情况下尽可能压缩 不保证压缩到指定字节
-     * @param datas
-     * @param byteCount 指定压缩字节数
-     * @return
+     * 压缩图片到指定byte大小 (在保证质量的情况下尽可能压缩 不保证压缩到指定字节)
+     * @param datas 图片byte格式
+     * @param byteCount 指定压缩到字节数
+     * @return 压缩后的byte[] (不保证压缩到指定字节)
      */
     public static byte[] compressBitmap(byte[] datas, int byteCount) {
         boolean isFinish = false;

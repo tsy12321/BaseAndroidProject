@@ -1,4 +1,4 @@
-package com.tsy.baseandroidproject.util;
+package com.tsy.sdk.myutil;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,7 +14,7 @@ public class MD5Utils {
     /**
      * md5加密
      * @param plainText 待加密字符串
-     * @return
+     * @return 加密后32位字符串
      */
     public static String getMd5(String plainText) {
 

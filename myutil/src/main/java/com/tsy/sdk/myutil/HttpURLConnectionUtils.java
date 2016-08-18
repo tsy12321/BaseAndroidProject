@@ -1,4 +1,4 @@
-package com.tsy.baseandroidproject.util;
+package com.tsy.sdk.myutil;
 
 import android.accounts.NetworkErrorException;
 import android.annotation.TargetApi;
@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * 简单封装的一个HttpURLConnection POST GET的工具类
+ * 一个基于HttpURLConnection 简单网络请求工具类
  * Created by tsy on 16/8/15.
  */
 public class HttpURLConnectionUtils {

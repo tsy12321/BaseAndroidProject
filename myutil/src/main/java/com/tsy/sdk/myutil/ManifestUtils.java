@@ -1,4 +1,4 @@
-package com.tsy.baseandroidproject.util;
+package com.tsy.sdk.myutil;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -15,7 +15,8 @@ public class ManifestUtils {
 
     /**
      * 返回Manifest指定meta-data值
-     * @param key
+     * @param context 全局context
+     * @param key meta-data key
      * @return
      *      成功-value
      *      失败-""
@@ -42,7 +43,8 @@ public class ManifestUtils {
 
     /**
      * 获取版本名
-     * @return
+     * @param context 全局context
+     * @return versoin name
      */
     public static String getVersionName(Context context) {
         String version = "0.0";

@@ -1,4 +1,4 @@
-package com.tsy.baseandroidproject.util;
+package com.tsy.sdk.myutil;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -12,6 +12,7 @@ public class NetworkUtils {
 
     /**
      * 检查网络是否连接
+     * @param context 全局context
      * @return true 已连接 false 未连接
      */
     public static Boolean checkNetworkConnect(Context context) {

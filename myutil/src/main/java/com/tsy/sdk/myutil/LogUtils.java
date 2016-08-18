@@ -1,9 +1,9 @@
-package com.tsy.baseandroidproject.util;
+package com.tsy.sdk.myutil;
 
 import android.util.Log;
 
 /**
- * LOG工具类
+ * LOG工具类 默认tag-LOGUTIL
  * Created by tsy on 16/8/15.
  */
 public class LogUtils {
@@ -43,13 +43,13 @@ public class LogUtils {
         LOG_ENABLE = enable;
     }
 
-    /**
-     * 设置是否显示详细Log
-     * @param isdetail true-显示详细 false-不显示详细
-     */
-    public static void setLogDetail(boolean isdetail) {
-        DETAIL_ENABLE = isdetail;
-    }
+//    /**
+//     * 设置是否显示详细Log
+//     * @param isdetail true-显示详细 false-不显示详细
+//     */
+//    public static void setLogDetail(boolean isdetail) {
+//        DETAIL_ENABLE = isdetail;
+//    }
 
     /**
      * verbose log
