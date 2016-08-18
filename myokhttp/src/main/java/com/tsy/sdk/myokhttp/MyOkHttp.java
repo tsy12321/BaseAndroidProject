@@ -10,6 +10,7 @@ import com.tsy.sdk.myokhttp.response.DownloadResponseHandler;
 import com.tsy.sdk.myokhttp.response.GsonResponseHandler;
 import com.tsy.sdk.myokhttp.response.IResponseHandler;
 import com.tsy.sdk.myokhttp.response.JsonResponseHandler;
+import com.tsy.sdk.myokhttp.response.RawResponseHandler;
 import com.tsy.sdk.myokhttp.util.LogUtils;
 
 import org.json.JSONException;
@@ -309,7 +310,7 @@ public class MyOkHttp {
             if(response.isSuccessful()) {
                 final String response_body = response.body().string();
 
-                if(mResponseHandler instanceof JsonResponseHandler) {
+                if(mResponseHandler instanceof JsonResponseHandler) {       //json回调
                     try {
                         final JSONObject jsonBody = new JSONObject(response_body);
                         mHandler.post(new Runnable() {
@@ -327,7 +328,7 @@ public class MyOkHttp {
                             }
                         });
                     }
-                } else if(mResponseHandler instanceof GsonResponseHandler) {
+                } else if(mResponseHandler instanceof GsonResponseHandler) {    //gson回调
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -340,6 +341,13 @@ public class MyOkHttp {
                                 mResponseHandler.onFailure(response.code(), "fail parse gson, body=" + response_body);
                             }
 
+                        }
+                    });
+                } else if(mResponseHandler instanceof RawResponseHandler) {     //raw字符串回调
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((RawResponseHandler)mResponseHandler).onSuccess(response.code(), response_body);
                         }
                     });
                 }

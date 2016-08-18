@@ -7,6 +7,7 @@
 |日期|更新内容|
 |---|---|
 |2016-08-17|完成POST请求,GET请求,上传文件,下载文件,取消请求和Gson转换功能|
+|2016-08-18|结果回调增加RawResponseHandler-直接返回字符串|
 
 ### 1 POST请求
 
@@ -33,16 +34,15 @@ MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", params, new Json
 Map<String, String> params = new HashMap<String, String>();
 params.put("name", "tsy");
 
-MyOkHttp.get().get(this, "http://192.168.3.1/test_okhttp.php", params, new GsonResponseHandler<BB>() {
+MyOkHttp.get().get(this, "http://192.168.3.1/test_okhttp.php", params, new RawResponseHandler() {
+    @Override
+    public void onSuccess(int statusCode, String response) {
+        LogUtils.v(TAG, statusCode + " " + response);
+    }
 
     @Override
     public void onFailure(int statusCode, String error_msg) {
         LogUtils.v(TAG, statusCode + " " + error_msg);
-    }
-
-    @Override
-    public void onSuccess(int statusCode, BB response) {
-        LogUtils.v(TAG, statusCode + " " + response.ret);
     }
 });
 ```
@@ -114,4 +114,8 @@ post,get,upload3个接口可以选择返回格式为普通Json还是Gson
 
 #### 6.2 gson
 
-回调继承GsonResponseHandler<T>,并设置泛型T,例如GET请求和Upload请求的例子
+回调继承GsonResponseHandler<T>,并设置泛型T,例如Upload请求的例子
+
+#### 6.3 raw原始数据
+
+回调继承RawResponseHandler,例如GET请求例子

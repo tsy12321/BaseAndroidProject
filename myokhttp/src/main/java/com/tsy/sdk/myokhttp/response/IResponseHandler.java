@@ -7,5 +7,5 @@ public interface IResponseHandler {
 
     void onFailure(int statusCode, String error_msg);
 
-    public void onProgress(long currentBytes, long totalBytes);
+    void onProgress(long currentBytes, long totalBytes);
 }

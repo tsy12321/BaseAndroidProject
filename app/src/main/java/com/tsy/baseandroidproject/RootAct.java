@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.os.Environment;
 
 import com.tsy.baseandroidproject.Base.BaseActivity;
-import com.tsy.baseandroidproject.util.LogUtils;
 import com.tsy.sdk.myokhttp.MyOkHttp;
 import com.tsy.sdk.myokhttp.response.DownloadResponseHandler;
 import com.tsy.sdk.myokhttp.response.GsonResponseHandler;
 import com.tsy.sdk.myokhttp.response.JsonResponseHandler;
+import com.tsy.sdk.myokhttp.response.RawResponseHandler;
+import com.tsy.sdk.myutil.LogUtils;
 
 import org.json.JSONObject;
 
@@ -29,9 +30,9 @@ public class RootAct extends BaseActivity {
         setContentView(R.layout.activity_root);
 
 //        doPost();
-//        doGet();
+        doGet();
 //        doUpload();
-        doDownload();
+//        doDownload();
     }
 
     //post请求
@@ -57,16 +58,15 @@ public class RootAct extends BaseActivity {
         Map<String, String> params = new HashMap<String, String>();
         params.put("name", "tsy");
 
-        MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", params, new GsonResponseHandler<BB>() {
+        MyOkHttp.get().get(this, "http://192.168.3.1/test_okhttp.php", params, new RawResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, String response) {
+                LogUtils.v(TAG, statusCode + " " + response);
+            }
 
             @Override
             public void onFailure(int statusCode, String error_msg) {
                 LogUtils.v(TAG, statusCode + " " + error_msg);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, BB response) {
-                LogUtils.v(TAG, statusCode + " " + response.ret);
             }
         });
     }
