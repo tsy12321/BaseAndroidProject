@@ -33,7 +33,7 @@ MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", params, new Json
 Map<String, String> params = new HashMap<String, String>();
 params.put("name", "tsy");
 
-MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", params, new GsonResponseHandler<BB>() {
+MyOkHttp.get().get(this, "http://192.168.3.1/test_okhttp.php", params, new GsonResponseHandler<BB>() {
 
     @Override
     public void onFailure(int statusCode, String error_msg) {
