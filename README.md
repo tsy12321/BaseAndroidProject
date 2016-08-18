@@ -35,7 +35,7 @@ Android项目基础架构。包含架构分层、基本工具层等, 持续更�
 
 [MyUtil README](https://github.com/tsy12321/BaseAndroidProject/tree/master/myutil)
 
-### 依赖注入
+### 依赖注入库
 
 ButterKnife.
 
@@ -53,6 +53,11 @@ ASimpleCache.
 
 详见[http://www.jianshu.com/p/25c107ed7348](http://www.jianshu.com/p/25c107ed7348)
 
+### Android M权限控制库
+
+Easypermissions
+
+详见[http://www.jianshu.com/p/2b3661928e66](http://www.jianshu.com/p/2b3661928e66)
 
 ### 欢迎关注我的公众号
 
