@@ -8,6 +8,7 @@
 |---|---|
 |2016-08-17|完成POST请求,GET请求,上传文件,下载文件,取消请求和Gson转换功能|
 |2016-08-18|结果回调增加RawResponseHandler-直接返回字符串|
+|2016-08-30|调用请求增加无context参数的重载方法|
 
 ### 1 POST请求
 
@@ -119,3 +120,43 @@ post,get,upload3个接口可以选择返回格式为普通Json还是Gson
 #### 6.3 raw原始数据
 
 回调继承RawResponseHandler,例如GET请求例子
+
+### 7 tag
+
+每个接口都有一个不带首个Context参数的重载函数:
+
+```java
+Map<String, String> params = new HashMap<String, String>();
+params.put("name", "tsy");
+
+MyOkHttp.get().post(this, "http://192.168.3.1/test_okhttp.php", params, new JsonResponseHandler() {
+    @Override
+    public void onSuccess(int statusCode, JSONObject response) {
+        LogUtils.v(TAG, statusCode + " " + response);
+    }
+
+    @Override
+    public void onFailure(int statusCode, String error_msg) {
+        LogUtils.v(TAG, statusCode + " " + error_msg);
+    }
+});
+```
+
+```java
+Map<String, String> params = new HashMap<String, String>();
+params.put("name", "tsy");
+
+MyOkHttp.get().post("http://192.168.3.1/test_okhttp.php", params, new JsonResponseHandler() {
+    @Override
+    public void onSuccess(int statusCode, JSONObject response) {
+        LogUtils.v(TAG, statusCode + " " + response);
+    }
+
+    @Override
+    public void onFailure(int statusCode, String error_msg) {
+        LogUtils.v(TAG, statusCode + " " + error_msg);
+    }
+});
+```
+
+**如果不是在activity等中发起的请求可以使用后一个方法.前一个方法适用于在activity等中发起的请求,并在activity销毁的时候统一取消.**

@@ -38,5 +38,17 @@ public interface LoginContract {
             void onSuccess(UserInfo user_info);
             void onFailure(String msg);
         }
+
+        /**
+         * 是否登录
+         * @return
+         */
+        boolean isLogin();
+
+        /**
+         * 获取当前登录用户
+         * @return
+         */
+        UserInfo getLoginUser();
     }
 }

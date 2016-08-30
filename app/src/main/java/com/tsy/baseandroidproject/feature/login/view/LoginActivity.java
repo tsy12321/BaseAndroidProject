@@ -1,11 +1,13 @@
 package com.tsy.baseandroidproject.feature.login.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 
 import com.tsy.baseandroidproject.Base.BaseActivity;
 import com.tsy.baseandroidproject.GlobalApp;
 import com.tsy.baseandroidproject.R;
+import com.tsy.baseandroidproject.feature.Home.view.HomeActivity;
 import com.tsy.baseandroidproject.feature.login.contract.LoginContract;
 import com.tsy.baseandroidproject.feature.login.presenter.LoginPresenter;
 import com.tsy.sdk.myutil.ToastUtils;
@@ -57,5 +59,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void goHome() {
         //跳转Home页面
         ToastUtils.showShort(GlobalApp.getInstance().getContext(), "登录成功, 跳转Home页面");
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

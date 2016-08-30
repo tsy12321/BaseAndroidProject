@@ -63,6 +63,16 @@ public class MyOkHttp {
 
     /**
      * post 请求
+     * @param url url
+     * @param params 参数
+     * @param responseHandler 回调
+     */
+    public void post(final String url, final Map<String, String> params, final IResponseHandler responseHandler) {
+        post(null, url, params, responseHandler);
+    }
+
+    /**
+     * post 请求
      * @param context 发起请求的context
      * @param url url
      * @param params 参数
@@ -77,14 +87,34 @@ public class MyOkHttp {
             }
         }
 
+        Request request;
+
         //发起request
-        Request request = new Request.Builder()
-                .url(url)
-                .post(builder.build())
-                .tag(context)
-                .build();
+        if(context == null) {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(builder.build())
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(builder.build())
+                    .tag(context)
+                    .build();
+        }
+
 
         client.newCall(request).enqueue(new MyCallback(new Handler(), responseHandler));
+    }
+
+    /**
+     * get 请求
+     * @param url url
+     * @param params 参数
+     * @param responseHandler 回调
+     */
+    public void get(final String url, final Map<String, String> params, final IResponseHandler responseHandler) {
+        get(null, url, params, responseHandler);
     }
 
     /**
@@ -108,13 +138,42 @@ public class MyOkHttp {
             }
         }
 
+        Request request;
+
         //发起request
-        Request request = new Request.Builder()
-                .url(url)
-                .tag(context)
-                .build();
+        if(context == null) {
+            request = new Request.Builder()
+                    .url(url)
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .tag(context)
+                    .build();
+        }
 
         client.newCall(request).enqueue(new MyCallback(new Handler(), responseHandler));
+    }
+
+    /**
+     * 上传文件
+     * @param url url
+     * @param files 上传的文件files
+     * @param responseHandler 回调
+     */
+    public void upload(String url, Map<String, File> files, final IResponseHandler responseHandler) {
+        upload(null, url, null, files, responseHandler);
+    }
+
+    /**
+     * 上传文件
+     * @param url url
+     * @param params 参数
+     * @param files 上传的文件files
+     * @param responseHandler 回调
+     */
+    public void upload(String url, Map<String, String> params, Map<String, File> files, final IResponseHandler responseHandler) {
+        upload(null, url, params, files, responseHandler);
     }
 
     /**
@@ -160,13 +219,32 @@ public class MyOkHttp {
             }
         }
 
-        Request request = new Request.Builder()
-                .url(url)
-                .post(new ProgressRequestBody(multipartBuilder.build(),responseHandler))
-                .tag(context)
-                .build();
+        Request request;
+        if(context == null) {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(new ProgressRequestBody(multipartBuilder.build(),responseHandler))
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .post(new ProgressRequestBody(multipartBuilder.build(),responseHandler))
+                    .tag(context)
+                    .build();
+        }
 
         client.newCall(request).enqueue(new MyCallback(new Handler(), responseHandler));
+    }
+
+    /**
+     * 下载文件
+     * @param url 下载地址
+     * @param filedir 下载目的目录
+     * @param filename 下载目的文件名
+     * @param downloadResponseHandler 下载回调
+     */
+    public void download(String url, String filedir, String filename, final DownloadResponseHandler downloadResponseHandler) {
+        download(null, url, filedir, filename, downloadResponseHandler);
     }
 
     /**
@@ -179,11 +257,17 @@ public class MyOkHttp {
      */
     public void download(Context context, String url, String filedir, String filename, final DownloadResponseHandler downloadResponseHandler) {
 
-        //发起request
-        Request request = new Request.Builder()
-                .url(url)
-                .tag(context)
-                .build();
+        Request request;
+        if(context == null) {
+            request = new Request.Builder()
+                    .url(url)
+                    .build();
+        } else {
+            request = new Request.Builder()
+                    .url(url)
+                    .tag(context)
+                    .build();
+        }
 
         client.newBuilder()
                 .addNetworkInterceptor(new Interceptor() {      //设置拦截器
@@ -405,3 +489,4 @@ public class MyOkHttp {
         return contentTypeFor;
     }
 }
+
